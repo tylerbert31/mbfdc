@@ -4,20 +4,21 @@ App::uses('AppModel', 'Model');
  * User Model
  *
  */
-class User extends AppModel {
+class User extends AppModel
+{
 
-/**
- * Primary key field
- *
- * @var string
- */
+	/**
+	 * Primary key field
+	 *
+	 * @var string
+	 */
 	public $primaryKey = 'user_id';
 
-/**
- * Validation rules
- *
- * @var array
- */
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	public $validate = array(
 		'email' => array(
 			'email' => array(
@@ -119,5 +120,25 @@ class User extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		'confirm_password' => array(
+			'notBlank' => array(
+				'rule' => array('notBlank'),
+				'message' => 'Please confirm your password',
+				'required' => true,
+				'last' => true,
+			),
+			'matchPasswords' => array(
+				'rule' => array('matchPasswords'),
+				'message' => 'Passwords do not match',
+			),
+		),
 	);
+
+	public function matchPasswords($data)
+	{
+		if ($data['confirm_password'] === $this->data['User']['password']) {
+			return true;
+		}
+		return false;
+	}
 }

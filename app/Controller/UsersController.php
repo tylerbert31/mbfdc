@@ -109,6 +109,20 @@ class UsersController extends AppController
 
 	public function register()
 	{
-
+		//post request
+		if ($this->request->is('post')) {
+			//create user
+			$this->User->create();
+			//save user
+			if ($this->User->save($this->request->data)) {
+				//set flash message
+				$this->Flash->success(__('The user has been saved.'));
+				//redirect to index
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				//set flash message
+				$this->Flash->error(__('The user could not be saved. Please, try again.'));
+			}
+		}
 	}
 }
