@@ -22,7 +22,8 @@
 				)
 			)
 		);
-		echo $this->Form->input('profile_url');
+		echo $this->Form->label('profile_url', 'Profile Pic');
+		echo $this->Form->file('profile_url');
 		?>
 	</fieldset>
 
