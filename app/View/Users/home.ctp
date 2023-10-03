@@ -30,7 +30,7 @@ if ($user['profile_url'] != '') {
     </p>
 </div>
 
-<?php echo $this->Html->link('Update Profile', array('controller' => 'users', 'action' => 'edit', $user['user_id']), array('escape' => false)); ?>
+<?php echo $this->Html->link('Update Profile', array('controller' => 'users', 'action' => 'update')); ?>
 
 
 

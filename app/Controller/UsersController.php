@@ -15,7 +15,7 @@ class UsersController extends AppController
 		$this->Auth->allow(array('register', 'registered'));
 		$this->Auth->authenticate = array(
 			'Form' => array(
-				'fields' => array('username' => 'email')
+				'fields' => array('username' => 'user_id')
 			)
 		);
 		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
@@ -155,6 +155,23 @@ class UsersController extends AppController
 
 	}
 
+	public function update()
+	{
+		$user_id = $this->Auth->user('user_id');
+		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
+		$this->set('user', $users[0]['User']);
+
+		if ($this->request->is(array('post', 'put'))) {
+			$this->User->id = $user_id;
+			if ($this->User->save($this->request->data)) {
+				$this->Session->setFlash(__('Your details have been updated.'));
+				return $this->redirect(array('action' => 'home'));
+			} else {
+				$this->Session->setFlash(__('Unable to update your details. Please try again.'));
+			}
+		}
+	}
+
 	public function login()
 	{
 		if ($this->request->is('post')) {
@@ -175,4 +192,6 @@ class UsersController extends AppController
 		$this->Auth->logout();
 		$this->redirect(array('action' => 'login'));
 	}
+
+
 }
