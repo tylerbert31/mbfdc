@@ -151,7 +151,7 @@ class UsersController extends AppController
 
 		$user_id = $this->Auth->user('user_id');
 		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
-		$this->set('user', $users[0]);
+		$this->set('user', $users[0]['User']);
 
 	}
 
