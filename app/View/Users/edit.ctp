@@ -10,9 +10,18 @@
 		echo $this->Form->input('lastname');
 		echo $this->Form->input('firstname');
 		echo $this->Form->input('password');
-		echo $this->Form->input('age');
+		echo $this->Form->input('age', array('min' => 14, 'max' => 99));
 		echo $this->Form->input('birthday', array('type' => 'text', 'class' => 'datepicker'));
-		echo $this->Form->input('gender');
+		echo $this->Form->input(
+			'gender',
+			array(
+				'type' => 'radio',
+				'options' => array(
+					'male' => 'Male',
+					'female' => 'Female'
+				)
+			)
+		);
 		echo $this->Form->input('profile_url');
 		?>
 	</fieldset>
@@ -24,7 +33,7 @@
 	$(document).ready(function () {
 		$('.datepicker').datepicker({
 			dateFormat: 'yy-mm-dd',
-			maxDate: new Date('2010-12-31'),
+			maxDate: new Date('2009-12-31'),
 			changeMonth: true,
 			changeYear: true,
 			yearRange: 'c-100:c'
