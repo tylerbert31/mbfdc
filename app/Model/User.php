@@ -29,6 +29,10 @@ class User extends AppModel
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
+			'unique' => array(
+				'rule' => 'isUnique',
+				'message' => 'This email is already taken',
+			),
 		),
 		'lastname' => array(
 			'notBlank' => array(
@@ -130,6 +134,16 @@ class User extends AppModel
 			'matchPasswords' => array(
 				'rule' => array('matchPasswords'),
 				'message' => 'Passwords do not match',
+			),
+		),
+		'bio' => array(
+			'notBlank' => array(
+				'rule' => array('notBlank'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
 	);
