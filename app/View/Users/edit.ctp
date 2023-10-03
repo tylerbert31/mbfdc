@@ -1,15 +1,14 @@
-<div class="users ">
+<div class="users">
 	<?php echo $this->Form->create('User'); ?>
 	<fieldset>
 		<legend>
-			<?php echo __('Edit User'); ?>
+			<?php echo __('Update Profile'); ?>
 		</legend>
 		<?php
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('email');
 		echo $this->Form->input('lastname');
 		echo $this->Form->input('firstname');
-		echo $this->Form->input('password');
 		echo $this->Form->input('age', array('min' => 14, 'max' => 99));
 		echo $this->Form->input('birthday', array('type' => 'text', 'class' => 'datepicker'));
 		echo $this->Form->input(
