@@ -149,7 +149,8 @@ class UsersController extends AppController
 	public function home()
 	{
 
-		$users = $this->User->find('all');
+		$user_id = $this->Auth->user('user_id');
+		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
 		$this->set('user', $users[0]);
 
 	}
@@ -159,6 +160,9 @@ class UsersController extends AppController
 		if ($this->request->is('post')) {
 
 			if ($this->Auth->login()) {
+				// Update "last_login" field to current date and time
+				$this->User->id = $this->Auth->user('user_id');
+				$this->User->saveField('last_login', date('Y-m-d H:i:s'));
 				return $this->redirect(array('action' => 'home'));
 			} else {
 				$this->Session->setFlash("Invalid Email or Password");

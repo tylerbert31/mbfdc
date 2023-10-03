@@ -7,7 +7,7 @@
 
 <div>
     <p>
-        <?php echo $user['User']['lastname'] . ' ' . $user['User']['firstname'] . ' ' . $user['User']['age']; ?>
+        <?php echo $user['User']['lastname'] . ', ' . $user['User']['firstname'] . ' ' . $user['User']['age']; ?>
     </p>
     <p>Birthday:
         <?php echo $user['User']['birthday']; ?>
