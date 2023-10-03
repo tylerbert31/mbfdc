@@ -125,4 +125,23 @@ class UsersController extends AppController
 			}
 		}
 	}
+
+	public function home()
+	{
+
+		$users = $this->User->find('all');
+		$this->set('user', $users[0]);
+
+	}
+
+	public function login()
+	{
+
+	}
+
+	public function logout()
+	{
+		// $this->Auth->logout();
+		$this->redirect(array('action' => 'login'));
+	}
 }
