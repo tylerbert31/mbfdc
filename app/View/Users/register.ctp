@@ -8,8 +8,8 @@
 		echo $this->Form->input('firstname', array('minLength' => 5, 'maxLength' => 20));
 		echo $this->Form->input('lastname', array('minLength' => 5, 'maxLength' => 20));
 		echo $this->Form->input('email');
-		echo $this->Form->input('password');
-		echo $this->Form->input('confirm_password', array('type' => 'password'));
+		echo $this->Form->input('password', array('minLength' => 5));
+		echo $this->Form->input('confirm_password', array('type' => 'password', 'minLength' => 5));
 		?>
 	</fieldset>
 	<?php echo $this->Form->end(__('Submit')); ?>

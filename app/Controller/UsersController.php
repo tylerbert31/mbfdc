@@ -9,12 +9,25 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController
 {
 
+	public function beforeFilter()
+	{
+		// parent::beforeFilter();
+		$this->Auth->allow(array('register', 'registered'));
+		$this->Auth->authenticate = array(
+			'Form' => array(
+				'fields' => array('username' => 'email')
+			)
+		);
+		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
+		$this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+	}
+
 	/**
 	 * Components
 	 *
 	 * @var array
 	 */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'Session');
 
 	/**
 	 * index method
@@ -51,10 +64,12 @@ class UsersController extends AppController
 	public function add()
 	{
 		if ($this->request->is('post')) {
+
 			$this->User->create();
+
 			if ($this->User->save($this->request->data)) {
 				$this->Flash->success(__('The user has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'users', 'action' => 'login'));
 			} else {
 				$this->Flash->error(__('The user could not be saved. Please, try again.'));
 			}
@@ -114,16 +129,21 @@ class UsersController extends AppController
 			//create user
 			$this->User->create();
 			//save user
+			$this->request->data['User']['joined'] = date('Y-m-d H:i:s');
+			$this->request->data['User']['age'] = 18;
+			$this->request->data['User']['password'] = AuthComponent::password($this->request->data['User']['password']);
+			$this->request->data['User']['confirm_password'] = AuthComponent::password($this->request->data['User']['confirm_password']);
 			if ($this->User->save($this->request->data)) {
-				//set flash message
-				$this->Flash->success(__('The user has been saved.'));
+
 				//redirect to index
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				//set flash message
-				$this->Flash->error(__('The user could not be saved. Please, try again.'));
+				return $this->redirect(array('action' => 'registered'));
 			}
 		}
+	}
+
+	public function registered()
+	{
+
 	}
 
 	public function home()
@@ -136,12 +156,19 @@ class UsersController extends AppController
 
 	public function login()
 	{
+		if ($this->request->is('post')) {
 
+			if ($this->Auth->login()) {
+				return $this->redirect(array('action' => 'home'));
+			} else {
+				$this->Session->setFlash("Invalid Email or Password");
+			}
+		}
 	}
 
 	public function logout()
 	{
-		// $this->Auth->logout();
+		$this->Auth->logout();
 		$this->redirect(array('action' => 'login'));
 	}
 }
