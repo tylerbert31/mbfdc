@@ -1,8 +1,15 @@
+<!-- Checks if Profile Pic is Uploaded -->
+<?php
+if ($user['User']['profile_url'] != '') {
+    $profile_url = $user['User']['profile_url'];
+} else {
+    $profile_url = "https://www.roiconnect.ca/wp-content/uploads/2021/07/DefaultAvatar.png";
+}
+?>
 <h1>User Profile</h1>
 
 <div>
-    <img src="<?php echo $this->Html->url('https://easydrawingguides.com/wp-content/uploads/2022/10/how-to-draw-a-mans-face-featured-image-1200.png'); ?>"
-        alt="Profile Picture" style="max-height: 200px;">
+    <img src="<?php echo $this->Html->url($profile_url); ?>" alt="Profile Picture" style="max-height: 200px;">
 </div>
 
 <div>
