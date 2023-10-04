@@ -29,28 +29,29 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<?php
 	echo $this->Html->meta('icon');
 
-	echo $this->Html->css('cake.generic');
-
 	echo $this->fetch('meta');
 	echo $this->fetch('css');
 	echo $this->fetch('script');
 	?>
 
+
+	<?php echo $this->Html->css('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'); ?>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 </head>
 
 <body>
 	<div id="container">
-		<div id="content">
 
-			<?php echo $this->Flash->render(); ?>
+		<?php echo $this->Flash->render(); ?>
 
-			<?php echo $this->fetch('content'); ?>
-		</div>
+		<?php echo $this->fetch('content'); ?>
+
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
+
 </body>
 
 </html>
