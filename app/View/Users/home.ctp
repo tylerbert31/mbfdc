@@ -42,7 +42,7 @@ if ($user['profile_url'] != '') {
                         <div class="col-md-4 gradient-custom text-center text-white"
                             style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem; background-image: url('https://images.unsplash.com/photo-1557683311-eac922347aa1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Ymx1ZSUyMGdyYWRpZW50fGVufDB8fDB8fHww&w=1000&q=80')">
                             <img src="<?php echo $this->Html->url($profile_url); ?>" alt="Avatar" class="img-fluid my-5"
-                                style="width: 80px;" />
+                                style="width: 80px; border-radius: 15px;" />
                             <h5 class="mx-2">
                                 <?php echo $user['lastname'] . ', ' . $user['firstname']; ?>
                             </h5>
@@ -84,7 +84,7 @@ if ($user['profile_url'] != '') {
                                 </div>
                                 <hr class="mt-0 mb-4">
                                 <div class="row pt-1">
-                                    <div class="col-6 mb-3">
+                                    <div class="col-12 mb-3">
                                         <h6>Hubby</h6>
                                         <p class="text-muted">
                                             <?php echo $user['bio']; ?>
