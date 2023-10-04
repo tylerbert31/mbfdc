@@ -214,5 +214,34 @@ class UsersController extends AppController
 		$this->redirect(array('action' => 'login'));
 	}
 
+	public function profile_pic()
+	{
+		$user_id = $this->Auth->user('user_id');
+		$user = $this->User->find('first', array('conditions' => array('user_id' => $user_id)));
+		if (!empty($user)) {
+			$this->set('user', $user['User']);
+		} else {
+			$this->set('user', null);
+		}
+
+		if ($this->request->is('post')) {
+			$file = $this->request->data['User']['photograph'];
+			$filename = $file['name'];
+			$file_tmp_name = $file['tmp_name'];
+			$file_ext = pathinfo($filename, PATHINFO_EXTENSION);
+			$file_new_name = uniqid() . '.' . $file_ext;
+			$file_destination = WWW_ROOT . 'img' . DS . 'profile_pics' . DS . $file_new_name;
+
+			if (move_uploaded_file($file_tmp_name, $file_destination)) {
+				$this->User->id = $user_id;
+				$this->User->saveField('profile_url', 'img/profile_pics/' . $file_new_name);
+				$this->Session->setFlash(__('Profile picture uploaded successfully.'));
+				$this->redirect(array('action' => 'home'));
+			} else {
+				$this->Session->setFlash(__('There was an error uploading your profile picture. Please try again.'));
+			}
+		}
+	}
+
 
 }
