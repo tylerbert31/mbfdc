@@ -5,7 +5,7 @@
 			<?php echo __('Add Message'); ?>
 		</legend>
 		<?php
-		echo $this->Form->input('sender');
+		echo $this->Form->input('sender', array('value' => $user, 'disabled' => true));
 		echo $this->Form->input('receiver');
 		echo $this->Form->input('message_content');
 		echo $this->Form->input('timestamp');

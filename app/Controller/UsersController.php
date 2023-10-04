@@ -131,6 +131,7 @@ class UsersController extends AppController
 			//save user
 			$this->request->data['User']['joined'] = date('Y-m-d H:i:s');
 			$this->request->data['User']['age'] = 18;
+
 			$this->request->data['User']['password'] = AuthComponent::password($this->request->data['User']['password']);
 			$this->request->data['User']['confirm_password'] = AuthComponent::password($this->request->data['User']['confirm_password']);
 			if ($this->User->save($this->request->data)) {
@@ -149,8 +150,46 @@ class UsersController extends AppController
 	public function home()
 	{
 
-		$users = $this->User->find('all');
-		$this->set('user', $users[0]);
+		$user_id = $this->Auth->user('user_id');
+		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
+		$this->set('user', $users[0]['User']);
+
+	}
+
+	public function update()
+	{
+
+		// Load the user's current data for pre-filling the form
+		$user_id = $this->Auth->user('user_id');
+		$user = $this->User->find('first', array('conditions' => array('user_id' => $user_id)));
+		if (!empty($user)) {
+			$this->set('user', $user['User']);
+		} else {
+			$this->set('user', null);
+		}
+
+		// If the form was submitted
+		if ($this->request->is('post')) {
+			//Fetch Data from FORM
+			$updateData = array(
+				'lastname' => "'" . $this->request->data['User']['lastname'] . "'",
+				'firstname' => "'" . $this->request->data['User']['firstname'] . "'",
+				'age' => $this->request->data['User']['age'],
+				'birthday' => "'" . $this->request->data['User']['birthday'] . "'",
+				'gender' => "'" . $this->request->data['User']['gender'] . "'",
+				'bio' => "'" . $this->request->data['User']['bio'] . "'"
+			);
+			//CONDITION - WHERE user_id = $user_id
+			$conditions = array('user_id' => $user_id);
+
+			// PERFORM UPDATE
+			$this->User->updateAll($updateData, $conditions);
+
+			//Navigate to Home on Success
+			$this->Session->setFlash('User data updated successfully');
+			$this->redirect(array('action' => 'home'));
+		}
+
 
 	}
 
@@ -159,6 +198,9 @@ class UsersController extends AppController
 		if ($this->request->is('post')) {
 
 			if ($this->Auth->login()) {
+				// Update "last_login" field to current date and time
+				$this->User->id = $this->Auth->user('user_id');
+				$this->User->saveField('last_login', date('Y-m-d H:i:s'));
 				return $this->redirect(array('action' => 'home'));
 			} else {
 				$this->Session->setFlash("Invalid Email or Password");
@@ -171,4 +213,6 @@ class UsersController extends AppController
 		$this->Auth->logout();
 		$this->redirect(array('action' => 'login'));
 	}
+
+
 }
