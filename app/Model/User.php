@@ -56,7 +56,7 @@ class User extends AppModel
 		),
 		'password' => array(
 			'notBlank' => array(
-				'rule' => array('notBlank'),
+				'rule' => array('notBlank')
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -127,13 +127,7 @@ class User extends AppModel
 		'confirm_password' => array(
 			'notBlank' => array(
 				'rule' => array('notBlank'),
-				'message' => 'Please confirm your password',
 				'required' => true,
-				'last' => true,
-			),
-			'matchPasswords' => array(
-				'rule' => array('matchPasswords'),
-				'message' => 'Passwords do not match',
 			),
 		),
 		'bio' => array(
@@ -147,12 +141,4 @@ class User extends AppModel
 			),
 		),
 	);
-
-	public function matchPasswords($data)
-	{
-		if ($data['confirm_password'] === $this->data['User']['password']) {
-			return true;
-		}
-		return false;
-	}
 }

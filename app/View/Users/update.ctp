@@ -6,7 +6,7 @@
         </legend>
         <?php
         echo $this->Form->input(
-            'lastname',
+            'User.lastname',
             array(
                 'label' => 'Last Name',
                 'value' => $user['lastname'],
@@ -14,7 +14,7 @@
             )
         );
         echo $this->Form->input(
-            'firstname',
+            'User.firstname',
             array(
                 'label' => 'First Name',
                 'value' => $user['firstname'],
@@ -22,7 +22,7 @@
             )
         );
         echo $this->Form->input(
-            'age',
+            'User.age',
             array(
                 'min' => 14,
                 'max' => 99,
@@ -32,7 +32,7 @@
             )
         );
         echo $this->Form->input(
-            'birthday',
+            'User.birthday',
             array(
                 'type' => 'text',
                 'class' => 'datepicker',
@@ -42,7 +42,7 @@
             )
         );
         echo $this->Form->input(
-            'gender',
+            'User.gender',
             array(
                 'type' => 'radio',
                 'options' => array(
@@ -55,7 +55,7 @@
             )
         );
         echo $this->Form->input(
-            'bio',
+            'User.bio',
             array(
                 'label' => 'Bio',
                 'value' => $user['bio'],
@@ -70,16 +70,15 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $('.datepicker').datepicker({
-            dateFormat: 'yy-mm-dd',
-            maxDate: new Date('2009-12-31'),
+    $(function () {
+        $(".datepicker").datepicker({
             changeMonth: true,
             changeYear: true,
-            yearRange: 'c-100:c'
+            yearRange: 'c-100:c+10', // display a range of 100 years before and 10 years after the current year
+            maxDate: new Date(2010, 11, 31), // December 31, 2010
+            minDate: new Date(1930, 0, 1) // January 1, 1930
         });
     });
 
 
 </script>
-<!-- HAYNAKOOOOOOOOOOOO -->

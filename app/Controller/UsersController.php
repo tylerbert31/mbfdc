@@ -15,7 +15,7 @@ class UsersController extends AppController
 		$this->Auth->allow(array('register', 'registered'));
 		$this->Auth->authenticate = array(
 			'Form' => array(
-				'fields' => array('username' => 'user_id')
+				'fields' => array('username' => 'email')
 			)
 		);
 		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
@@ -131,6 +131,7 @@ class UsersController extends AppController
 			//save user
 			$this->request->data['User']['joined'] = date('Y-m-d H:i:s');
 			$this->request->data['User']['age'] = 18;
+
 			$this->request->data['User']['password'] = AuthComponent::password($this->request->data['User']['password']);
 			$this->request->data['User']['confirm_password'] = AuthComponent::password($this->request->data['User']['confirm_password']);
 			if ($this->User->save($this->request->data)) {
@@ -157,19 +158,39 @@ class UsersController extends AppController
 
 	public function update()
 	{
-		$user_id = $this->Auth->user('user_id');
-		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
-		$this->set('user', $users[0]['User']);
 
-		if ($this->request->is(array('post', 'put'))) {
-			$this->User->id = $user_id;
-			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('Your details have been updated.'));
-				return $this->redirect(array('action' => 'home'));
-			} else {
-				$this->Session->setFlash(__('Unable to update your details. Please try again.'));
-			}
+		// Load the user's current data for pre-filling the form
+		$user_id = $this->Auth->user('user_id');
+		$user = $this->User->find('first', array('conditions' => array('user_id' => $user_id)));
+		if (!empty($user)) {
+			$this->set('user', $user['User']);
+		} else {
+			$this->set('user', null);
 		}
+
+		// If the form was submitted
+		if ($this->request->is('post')) {
+			//Fetch Data from FORM
+			$updateData = array(
+				'lastname' => "'" . $this->request->data['User']['lastname'] . "'",
+				'firstname' => "'" . $this->request->data['User']['firstname'] . "'",
+				'age' => $this->request->data['User']['age'],
+				'birthday' => "'" . $this->request->data['User']['birthday'] . "'",
+				'gender' => "'" . $this->request->data['User']['gender'] . "'",
+				'bio' => "'" . $this->request->data['User']['bio'] . "'"
+			);
+			//CONDITION - WHERE user_id = $user_id
+			$conditions = array('user_id' => $user_id);
+
+			// PERFORM UPDATE
+			$this->User->updateAll($updateData, $conditions);
+
+			//Navigate to Home on Success
+			$this->Session->setFlash('User data updated successfully');
+			$this->redirect(array('action' => 'home'));
+		}
+
+
 	}
 
 	public function login()
