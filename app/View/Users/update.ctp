@@ -14,6 +14,9 @@
                 <li class="nav-item active">
                     <?php echo $this->Html->link('Update Profile', array('controller' => 'users', 'action' => 'update'), array('class' => 'nav-link')); ?>
                 </li>
+                <li class="nav-item">
+                    <?php echo $this->Html->link('Messages', array('controller' => 'users', 'action' => 'logout', ), array('class' => 'btn btn-outline-success my-2 my-sm-0')); ?>
+                </li>
             </ul>
             <?php echo $this->Html->link('Log Out', array('controller' => 'users', 'action' => 'logout', ), array('class' => 'btn btn-outline-primary my-2 my-sm-0')); ?>
 
@@ -43,7 +46,7 @@
                             </div>
 
                             <div class="d-flex justify-content-center">
-                                <?php echo $this->Html->link('Cancel', array('controller' => 'Users', 'action' => 'home'), array('class' => 'btn btn-secondary btn-block fa-lg gradient-custom-2 mb-3', 'id' => 'cancelButton')); ?>
+                                <?php echo $this->Html->link('Cancel', array('controller' => 'Users', 'action' => 'home'), array('class' => 'btn btn-outline-secondary btn-block fa-lg gradient-custom-2 mb-3', 'id' => 'cancelButton')); ?>
 
                             </div>
                         </div>
