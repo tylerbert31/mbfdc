@@ -9,12 +9,24 @@ App::uses('AppController', 'Controller');
 class MessagesController extends AppController
 {
 
+	public function beforeFilter()
+	{
+		// parent::beforeFilter();
+		$this->Auth->allow(array('getMessages'));
+		$this->Auth->authenticate = array(
+			'Form' => array(
+				'fields' => array('username' => 'email')
+			)
+		);
+		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
+		$this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+	}
 	/**
 	 * Components
 	 *
 	 * @var array
 	 */
-	public $components = array('Paginator', 'Session');
+	public $components = array('Paginator', 'Session', 'RequestHandler');
 
 	/**
 	 * index method
@@ -111,5 +123,13 @@ class MessagesController extends AppController
 		return $this->redirect(array('action' => 'index'));
 	}
 
+	public function getMessages()
+	{
+		$messages = $this->Message->find('all');
+		$this->set([
+			'messages' => $messages,
+			'_serialize' => ['messages']
+		]);
+	}
 
 }

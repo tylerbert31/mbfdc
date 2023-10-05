@@ -19,6 +19,30 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
+Router::mapResources(
+    'users',
+    array(
+        'prefix' => 'api',
+        'controller' => 'users',
+        'resourceMap' => array(
+            array('action' => 'getUsers', 'method' => 'GET', 'id' => false)
+        )
+    )
+);
+
+Router::mapResources(
+    'messages',
+    array(
+        'prefix' => 'api',
+        'controller' => 'users',
+        'resourceMap' => array(
+            array('action' => 'getMessages', 'method' => 'GET', 'id' => false)
+        )
+    )
+);
+
+Router::parseExtensions('json');
+
 
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',
@@ -34,6 +58,8 @@ Router::connect('/register', array('controller' => 'users', 'action' => 'registe
  * ...and connect the rest of 'Pages' controller's URLs.
  */
 Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
+
+
 
 /**
  * Load all plugin routes. See the CakePlugin documentation on
