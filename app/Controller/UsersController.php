@@ -241,5 +241,51 @@ class UsersController extends AppController
 		}
 	}
 
+	public function email()
+	{
+		//fetch email using user id from auth
+		$user_id = $this->Auth->user('user_id');
+		$user_email = $this->User->find('first', array('conditions' => array('user_id' => $user_id), 'fields' => array('email')));
+		$this->set('user_email', $user_email['User']['email']);
+
+		if ($this->request->is('post')) {
+			$current_email = $this->request->data['User']['current_email'];
+			if ($current_email == $user_email['User']['email']) {
+				$new_email = $this->request->data['User']['new_email'];
+				$this->User->id = $user_id;
+				$this->User->saveField('email', $new_email);
+				$this->Session->setFlash(__('Email updated successfully.'));
+				$this->redirect(array('action' => 'home'));
+			} else {
+				$this->Session->setFlash(__('Current email does not match.'));
+			}
+		}
+	}
+
+	public function password()
+	{
+		//fetch email using user id from auth
+		$user_id = $this->Auth->user('user_id');
+
+		if ($this->request->is('post')) {
+			$current_password = $this->request->data['User']['current_pass'];
+			$new_password = $this->request->data['User']['new_pass'];
+			$confirm_password = $this->request->data['User']['confirm_pass'];
+
+			if ($new_password == $confirm_password) {
+				$user = $this->User->find('first', array('conditions' => array('user_id' => $user_id), 'fields' => array('password')));
+				if ($user['User']['password'] == AuthComponent::password($current_password)) {
+					$this->User->id = $user_id;
+					$this->User->saveField('password', AuthComponent::password($new_password));
+					$this->Session->setFlash(__('Password updated successfully.'));
+					$this->redirect(array('action' => 'home'));
+				} else {
+					$this->Session->setFlash(__('Current password does not match.'));
+				}
+			} else {
+				$this->Session->setFlash(__('New password and confirm password do not match.'));
+			}
+		}
+	}
 
 }
