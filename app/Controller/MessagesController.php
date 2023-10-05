@@ -20,6 +20,7 @@ class MessagesController extends AppController
 		);
 		$this->Auth->loginRedirect = array('controller' => 'users', 'action' => 'home');
 		$this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
+		$this->loadModel('User');
 	}
 	/**
 	 * Components
@@ -35,17 +36,31 @@ class MessagesController extends AppController
 	 */
 	public function index()
 	{
-		$this->Message->recursive = 0;
-		$this->set('messages', $this->Paginator->paginate());
+		$user_id = $this->Auth->user('user_id');
+		$this->set('user_id', $user_id);
+
+		$messages = $this->Message->find(
+			'all',
+			array(
+				'fields' => array('Message.receiver', 'MAX(Message.timestamp) AS latest_timestamp', 'User.user_id', 'User.lastname', 'User.firstname', 'User.profile_url'),
+				'conditions' => array('Message.sender' => $user_id),
+				'group' => array('Message.receiver'),
+				'joins' => array(
+					array(
+						'table' => 'users',
+						'alias' => 'User',
+						'type' => 'LEFT',
+						'conditions' => array(
+							'User.user_id = Message.receiver'
+						)
+					)
+				)
+			)
+		);
+
+		$this->set('messages', $messages);
 	}
 
-	/**
-	 * view method
-	 *
-	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
-	 */
 	public function view($id = null)
 	{
 		if (!$this->Message->exists($id)) {
@@ -55,11 +70,6 @@ class MessagesController extends AppController
 		$this->set('message', $this->Message->find('first', $options));
 	}
 
-	/**
-	 * add method
-	 *
-	 * @return void
-	 */
 	public function add()
 	{
 
@@ -68,6 +78,8 @@ class MessagesController extends AppController
 
 		if ($this->request->is('post')) {
 			$this->Message->create();
+			$this->request->data['Message']['sender'] = $this->Auth->user('user_id');
+			$this->request->data['Message']['timestamp'] = date('Y-m-d H:i');
 			if ($this->Message->save($this->request->data)) {
 				$this->Session->setFlash('The message has been saved.');
 				return $this->redirect(array('action' => 'index'));
@@ -76,53 +88,6 @@ class MessagesController extends AppController
 			}
 		}
 	}
-
-	/**
-	 * edit method
-	 *
-	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
-	 */
-	public function edit($id = null)
-	{
-		if (!$this->Message->exists($id)) {
-			throw new NotFoundException(__('Invalid message'));
-		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Message->save($this->request->data)) {
-				$this->Session->setFlash('The message has been saved.');
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash('The message could not be saved. Please, try again.');
-			}
-		} else {
-			$options = array('conditions' => array('Message.' . $this->Message->primaryKey => $id));
-			$this->request->data = $this->Message->find('first', $options);
-		}
-	}
-
-	/**
-	 * delete method
-	 *
-	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
-	 */
-	public function delete($id = null)
-	{
-		if (!$this->Message->exists($id)) {
-			throw new NotFoundException(__('Invalid message'));
-		}
-		$this->request->allowMethod('post', 'delete');
-		if ($this->Message->delete($id)) {
-			$this->Session->setFlash('The message has been deleted.');
-		} else {
-			$this->Session->setFlash('The message could not be deleted. Please, try again.');
-		}
-		return $this->redirect(array('action' => 'index'));
-	}
-
 	public function getMessages()
 	{
 		$messages = $this->Message->find('all');
@@ -130,6 +95,65 @@ class MessagesController extends AppController
 			'messages' => $messages,
 			'_serialize' => ['messages']
 		]);
+	}
+
+	public function direct($id = null)
+	{
+		if (!$this->Message->find('first', array('conditions' => array('Message.receiver' => $id)))) {
+
+			$this->Session->setFlash('User does not exist.');
+			return $this->redirect(array('action' => 'index'));
+		} else {
+			$user_id = $this->Auth->user('user_id');
+			$this->set('user_id', $user_id['User']);
+			// Fetch User model instance
+
+			$user_profile = $this->User->find(
+				'first',
+				array(
+					'conditions' => array('User.user_id' => $user_id),
+					'fields' => array('User.profile_url', 'User.firstname', 'User.user_id')
+				)
+			);
+
+			$receiver_profile = $this->User->find(
+				'first',
+				array(
+					'conditions' => array('User.user_id' => $id),
+					'fields' => array('User.profile_url', 'User.firstname')
+				)
+			);
+
+			$this->set('user_profile', $user_profile['User']);
+			$this->set('receiver_profile', $receiver_profile['User']);
+
+			$messages = $this->Message->find(
+				'all',
+				array(
+					'conditions' => array(
+						'AND' => array(
+							array(
+								'OR' => array(
+									array('Message.sender' => $user_id),
+									array('Message.receiver' => $user_id)
+								)
+							),
+							array(
+								'OR' => array(
+									array('Message.sender' => $id),
+									array('Message.receiver' => $id)
+								)
+							)
+						)
+					),
+					'order' => 'Message.timestamp DESC'
+				)
+			);
+
+
+			$this->set('messages', $messages);
+		}
+
 	}
 
 }

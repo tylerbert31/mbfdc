@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+
 /**
  * Users Controller
  *
@@ -12,7 +13,7 @@ class UsersController extends AppController
 	public function beforeFilter()
 	{
 		// parent::beforeFilter();
-		$this->Auth->allow(array('register', 'registered', 'getUsers'));
+		$this->Auth->allow(array('register', 'registered', 'getUsers', 'getProfile'));
 		$this->Auth->authenticate = array(
 			'Form' => array(
 				'fields' => array('username' => 'email')
@@ -207,7 +208,6 @@ class UsersController extends AppController
 	}
 
 
-
 	// REST API CONTROLLERS
 	public function getUsers()
 	{
@@ -223,5 +223,26 @@ class UsersController extends AppController
 				'_serialize' => 'users'
 			)
 		);
+	}
+
+	public function getProfile($id = null)
+	{
+		if (!$this->User->exists($id)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		$profile_url = $this->User->find(
+			'first',
+			array(
+				'conditions' => array('user_id' => $id),
+				'fields' => array('profile_url')
+			)
+		);
+		$this->set(
+			array(
+				'profile_url' => $profile_url['User']['profile_url'],
+				'_serialize' => array('profile_url')
+			)
+		);
+
 	}
 }
