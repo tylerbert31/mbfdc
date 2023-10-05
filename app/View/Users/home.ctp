@@ -2,15 +2,16 @@
 <?php echo $this->Html->css('message/message'); ?>
 <?php
 if ($user['profile_url'] != '') {
-    $profile_url = $user['profile_url'];
+    $profile_url = $this->Html->webroot($user['profile_url']);
 } else {
     $profile_url = "https://www.roiconnect.ca/wp-content/uploads/2021/07/DefaultAvatar.png";
 }
+
 ?>
 
 
 
-<section class=" " style="background-color: #eee; height: 100vh;">
+<section class=" " style="background-color: #f2f2f2; height: 100vh;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
             aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,7 +27,7 @@ if ($user['profile_url'] != '') {
                 <li class="nav-item">
                     <?php echo $this->Html->link('Update Profile', array('controller' => 'users', 'action' => 'update'), array('class' => 'nav-link')); ?>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mb-t">
                     <?php echo $this->Html->link('Messages', array('controller' => 'users', 'action' => 'logout', ), array('class' => 'btn btn-outline-success my-2 my-sm-0')); ?>
                 </li>
             </ul>
@@ -41,13 +42,14 @@ if ($user['profile_url'] != '') {
                     <div class="row g-0">
                         <div class="col-md-4 gradient-custom text-center text-white"
                             style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem; background-image: url('https://images.unsplash.com/photo-1557683311-eac922347aa1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Ymx1ZSUyMGdyYWRpZW50fGVufDB8fDB8fHww&w=1000&q=80')">
-                            <img src="<?php echo $this->Html->url($profile_url); ?>" alt="Avatar" class="img-fluid my-5"
-                                style="width: 80px; border-radius: 15px;" />
+                            <img src="<?php echo $profile_url; ?>" alt="Avatar" class="img-fluid my-5"
+                                style="max-height: 130px; border-radius: 15px;" />
                             <h5 class="mx-2">
                                 <?php echo $user['lastname'] . ', ' . $user['firstname']; ?>
                             </h5>
                             <p>Member</p>
                             <i class="far fa-edit mb-5"></i>
+
                         </div>
                         <div class="col-md-8">
                             <div class="card-body p-4">

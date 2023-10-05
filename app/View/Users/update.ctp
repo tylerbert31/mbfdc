@@ -1,4 +1,4 @@
-<section class="h-100 bg-image" style="background-color: #eee;">
+<section class="h-100 bg-image" style="background-color: #f2f2f2;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
             aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,7 @@
 
                             <?php
                             echo $this->Form->create('User');
+                            echo $this->Html->link('Update Picture', array('controller' => 'users', 'action' => 'profile_pic', ), array('class' => 'btn btn-outline-primary mb-3 '));
                             echo $this->Form->input('User.lastname', array('label' => 'Last Name', 'class' => 'form-control form-control-lg', 'value' => $user['lastname']));
                             echo $this->Form->input('User.firstname', array('label' => 'First Name', 'class' => 'form-control form-control-lg', 'value' => $user['firstname']));
                             echo $this->Form->input('User.age', array('label' => 'Age', 'class' => 'form-control form-control-lg', 'value' => $user['age']));
