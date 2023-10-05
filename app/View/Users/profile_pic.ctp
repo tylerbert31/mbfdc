@@ -31,10 +31,10 @@ if ($user['profile_url'] != '') {
     </div>
 </nav>
 
-<div class=" w-100" style="background-color: #f2f2f2;">
-    <div class="row justify-content-center align-items-center" style="height:100vh">
-        <div class="col-md-6">
-            <div class="card">
+<div class="w-100" style="background-color: #f2f2f2;">
+    <div class="d-flex flex-column  justify-content-center align-items-center" style="height:95vh">
+        <div class="">
+            <div class="card" style="max-width: 500px;">
                 <div class="card-header text-center ">
                     Update Profile Picture
                 </div>
