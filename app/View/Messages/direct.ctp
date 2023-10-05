@@ -27,7 +27,7 @@
                             <img src="<?php echo $this->Html->webroot($user_profile['profile_url']) ?>"
                                 class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
                             <div class="text-muted small text-nowrap mt-2">
-                                <?php echo $message['Message']['timestamp'] ?>
+                                <?php echo substr($message['Message']['timestamp'], 11, -3) ?>
                             </div>
                         </div>
                         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
@@ -45,7 +45,7 @@
                             <img src="<?php echo $this->Html->webroot($receiver_profile['profile_url']) ?>"
                                 class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
                             <div class="text-muted small text-nowrap mt-2">
-                                <?php echo $message['Message']['timestamp'] ?>
+                                <?php echo substr($message['Message']['timestamp'], 11, -3) ?>
                             </div>
                         </div>
                         <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
