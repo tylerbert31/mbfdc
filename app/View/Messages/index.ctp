@@ -34,11 +34,14 @@
 </nav>
 <div class="container d-flex justify-content-center align-items-center my-5">
     <div class="card" style="width: 700px; max-width: 1000px; ">
-        <div class="card-header">
+        <div class="card-header d-flex flex-row ">
             <h2>Messages List
-                <?php echo $this->Html->link('New Message', array('controller' => 'messages', 'action' => 'new', ), array('class' => 'btn btn-outline-primary my-2 my-sm-0')); ?>
-            </h2>
 
+            </h2>
+            <?php echo $this->Html->link('New Message', array('controller' => 'messages', 'action' => 'new', ), array('class' => 'btn btn-outline-primary ml-2 align-content-center ')); ?>
+            <input type="text" class=""
+                style="flex-grow: 1; margin: 0px 0px 0px 10px; border-radius: 5px; border: none;"
+                placeholder=" Search Contact..." id="autocomplete">
         </div>
         <ul class="list-group list-group-flush">
             <?php foreach ($messages as $message): ?>
@@ -64,3 +67,60 @@
 
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        var current_user = <?php echo $user_id; ?>
+
+        var people = [];
+
+        $.ajax({
+            url: 'http://localhost/mbfdc/users/getUsers.json',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Log the data to the console
+                data.forEach(function (data) {
+                    if (data.User.user_id == current_user) {
+                        return;
+                    }
+                    var new_contact = {
+                        label: data.User.firstname + ' ' + data.User.lastname,
+                        image: data.User.profile_url,
+                        user_id: data.User.user_id
+                    };
+                    people.push(new_contact)
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+
+        $("#autocomplete").autocomplete({
+            source: people,
+            minLength: 0,
+            select: function (event, ui) {
+                // Set the chosen user_id to the #receiver input field
+                window.location.href = 'http://localhost/mbfdc/messages/direct/' + ui.item.user_id;
+            },
+            focus: function (event, ui) {
+                // Prevent the input field from being updated with the selected label
+                event.preventDefault();
+            },
+            open: function (event, ui) {
+                // Customize the appearance of the autocomplete dropdown
+                $('.ui-autocomplete').css('width', $('#autocomplete').outerWidth() + 'px');
+            }
+        })
+            .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append(`<img style="width: 64px; border-radius: 10px 10px; max-height: 50px" src="/mbfdc/${item.image}" alt="${item.label}"> ${item.label}`)
+                    .appendTo(ul);
+            };
+
+        // Show the autocomplete dropdown on focus
+        $("#autocomplete").on("focus", function () {
+            $(this).autocomplete("search", $(this).val());
+        });
+    });
+</script>

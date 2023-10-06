@@ -74,10 +74,6 @@ if ($user['profile_url'] != '') {
 
 </div>
 <script>
-
-
-
-
     $(document).ready(function () {
         var current_user = <?php echo $user['user_id']; ?>;
 
