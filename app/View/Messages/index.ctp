@@ -35,7 +35,10 @@
 <div class="container d-flex justify-content-center align-items-center my-5">
     <div class="card" style="width: 700px; max-width: 1000px; ">
         <div class="card-header">
-            <h2>Messages List</h2>
+            <h2>Messages List
+                <?php echo $this->Html->link('New Message', array('controller' => 'messages', 'action' => 'new', ), array('class' => 'btn btn-outline-primary my-2 my-sm-0')); ?>
+            </h2>
+
         </div>
         <ul class="list-group list-group-flush">
             <?php foreach ($messages as $message): ?>

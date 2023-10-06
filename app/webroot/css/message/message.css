@@ -12,3 +12,23 @@
     border-radius: .25rem;
     text-align: center;
 }
+
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    position: absolute;
+    border-radius: 0px 0px 10px 10px;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  }
+  .ui-autocomplete li {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+  .ui-autocomplete img {
+    width: 64px;
+    height: 64px;
+  }
+
