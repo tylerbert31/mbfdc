@@ -51,14 +51,17 @@
                             onclick="window.location.href='<?php echo $this->Html->url(array('controller' => 'messages', 'action' => 'direct', $message['User']['user_id'])); ?>'">
                             <img src="<?php echo $this->Html->webroot($message['User']['profile_url']) ?>"
                                 class="rounded-circle mr-3" alt="Chris Wood" width="40" height="40">
-                            <h5 class="card-title">
-                                <?php echo $message['User']['firstname'] . ' ' . $message['User']['lastname']; ?>
-                            </h5>
-                            <p class="card-text">
-                                <span class="message-date">
-                                    <?php echo substr((substr($message[0]['latest_timestamp'], 10)), 0, -3); ?>
-                                </span>
-                            </p>
+                            <div class="card-text">
+                                <h5 class="card-title">
+                                    <?php echo $message['User']['firstname'] . ' ' . $message['User']['lastname']; ?>
+                                </h5><br>
+                                <p class="card-text" style="margin-top: -35px">
+                                    <?php echo $message['Message']['message_content']; ?>
+                                    <span class="message-date">
+                                        <?php echo substr((substr($message[0]['latest_timestamp'], 10)), 0, -3); ?>
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </li>
