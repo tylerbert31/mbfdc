@@ -15,7 +15,7 @@
                     <?php echo $this->Html->link('Update Profile', array('controller' => 'users', 'action' => 'update'), array('class' => 'nav-link')); ?>
                 </li>
                 <li class="nav-item">
-                    <?php echo $this->Html->link('Messages', array('controller' => 'users', 'action' => 'logout', ), array('class' => 'btn btn-outline-success my-2 my-sm-0')); ?>
+                    <?php echo $this->Html->link('Messages', array('controller' => 'messages', 'action' => 'index', ), array('class' => 'btn btn-outline-success my-2 my-sm-0')); ?>
                 </li>
             </ul>
 

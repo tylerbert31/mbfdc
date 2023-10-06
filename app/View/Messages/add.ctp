@@ -8,7 +8,6 @@
 		echo $this->Form->input('sender', array('value' => $user, 'disabled' => true));
 		echo $this->Form->input('receiver');
 		echo $this->Form->input('message_content');
-		echo $this->Form->input('timestamp');
 		?>
 	</fieldset>
 	<?php echo $this->Form->end(__('Submit')); ?>
