@@ -42,7 +42,7 @@ class MessagesController extends AppController
 		$messages = $this->Message->find(
 			'all',
 			array(
-				'fields' => array('Message.receiver', 'MAX(Message.timestamp) AS latest_timestamp', 'User.user_id', 'User.lastname', 'User.firstname', 'User.profile_url', 'Message.id'),
+				'fields' => array('Message.receiver', 'MAX(Message.timestamp) AS latest_timestamp', 'User.user_id', 'User.lastname', 'User.firstname', 'User.profile_url', 'Message.id', 'Message.message_content'),
 				'conditions' => array('Message.sender' => $user_id),
 				'group' => array('Message.receiver'),
 				'joins' => array(
@@ -55,7 +55,7 @@ class MessagesController extends AppController
 						)
 					)
 				),
-				'order' => array('Message.timestamp' => 'ASC')
+				'order' => array('Message.timestamp' => 'DESC')
 			)
 		);
 
@@ -122,7 +122,7 @@ class MessagesController extends AppController
 							)
 						)
 					),
-					'order' => 'Message.timestamp ASC'
+					'order' => 'Message.timestamp DESC'
 				)
 			);
 
