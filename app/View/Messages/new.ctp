@@ -42,12 +42,13 @@ if ($user['profile_url'] != '') {
             </div>
         </div>
     </nav>
-    <div style="flex-grow: 1; display: flex;">
-        <div id="message-form" class="col-md-6" style="margin: auto;">
+    <div style="flex-grow: 1; display: flex; background-color: #f2f2f2;">
+        <div id="message-form" class="col-md-6"
+            style="margin: auto;background-color: white; padding: 25px; border-radius: 5px">
             <div class="form-group">
 
-
-                <?php echo $this->Form->input("receiver_name", array("class" => "form-control", "type" => "text", "id" => "contact-search", "placeholder" => "Enter name")) ?>
+                <h2 class="text-uppercase text-center mb-5">New Message</h2>
+                <?php echo $this->Form->input("receiver_name", array("class" => "form-control", "type" => "text", "id" => "autocomplete", "placeholder" => "Enter name")) ?>
                 <div id="contact-suggestions" class="list-group mt-2"></div>
 
                 <?php echo $this->Form->create('Message'); ?>
@@ -80,7 +81,7 @@ if ($user['profile_url'] != '') {
     $(document).ready(function () {
         var current_user = <?php echo $user['user_id']; ?>;
 
-        var contacts = [];
+        var people = [];
 
         $.ajax({
             url: 'http://localhost/mbfdc/users/getUsers.json',
@@ -93,11 +94,11 @@ if ($user['profile_url'] != '') {
                         return;
                     }
                     var new_contact = {
-                        name: data.User.firstname + ' ' + data.User.lastname,
+                        label: data.User.firstname + ' ' + data.User.lastname,
                         image: data.User.profile_url,
                         user_id: data.User.user_id
                     };
-                    contacts.push(new_contact)
+                    people.push(new_contact)
                 });
             },
             error: function (xhr, status, error) {
@@ -105,49 +106,32 @@ if ($user['profile_url'] != '') {
             }
         });
 
+        $("#autocomplete").autocomplete({
+            source: people,
+            minLength: 0,
+            select: function (event, ui) {
+                // Set the chosen user_id to the #receiver input field
+                $("#receiver").val(ui.item.user_id);
+                console.log(ui.item.user_id);
+            },
+            focus: function (event, ui) {
+                // Prevent the input field from being updated with the selected label
+                event.preventDefault();
+            },
+            open: function (event, ui) {
+                // Customize the appearance of the autocomplete dropdown
+                $('.ui-autocomplete').css('width', '300px'); // Set the width as needed
+            }
+        })
+            .autocomplete("instance")._renderItem = function (ul, item) {
+                return $("<li>")
+                    .append(`<img style="width: 64px; border-radius: 10px 10px; max-height: 50px" src="/mbfdc/${item.image}" alt="${item.label}"> ${item.label}`)
+                    .appendTo(ul);
+            };
 
-
-        // Get the input and suggestions container
-        var input = $('#contact-search');
-        var suggestions = $('#contact-suggestions');
-
-        // Listen for input changes
-        input.on('input', function () {
-            // Clear the suggestions container
-            suggestions.empty();
-
-            // Get the search query
-            var query = input.val().toLowerCase();
-
-            // Filter the contacts based on the search query
-            var filteredContacts = contacts.filter(function (contact) {
-                return contact.name.toLowerCase().indexOf(query) !== -1;
-            });
-
-            // Add the filtered contacts to the suggestions container
-            var counter = 0;
-            filteredContacts.forEach(function (contact) {
-                if (counter < 5) {
-                    var item = $('<a href="#" class="list-group-item list-group-item-action"></a>');
-                    var image = $('<img src="/mbfdc/' + contact.image + '" class="rounded-circle mr-2" width="40" height="40">');
-                    var name = $('<span>' + contact.name + '</span>');
-                    item.append(image).append(name);
-                    suggestions.append(item);
-
-                    // Listen for click events on the suggestion items
-                    item.on('click', function () {
-                        // Set the input value to the name of the clicked suggestion
-                        input.val(contact.name);
-                        $('#receiver').val(contact.user_id);
-                        console.log($('#receiver').val());
-
-                        // Hide the suggestions container
-                        suggestions.empty();
-                    });
-
-                    counter++;
-                }
-            });
+        // Show the autocomplete dropdown on focus
+        $("#autocomplete").on("focus", function () {
+            $(this).autocomplete("search", $(this).val());
         });
     });
 </script>

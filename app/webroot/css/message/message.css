@@ -13,3 +13,21 @@
     text-align: center;
 }
 
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    position: absolute;
+    border-radius: 0px 0px 10px 10px;
+  }
+  .ui-autocomplete li {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+  .ui-autocomplete img {
+    width: 64px;
+    height: 64px;
+  }
+
