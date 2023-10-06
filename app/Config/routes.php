@@ -34,9 +34,10 @@ Router::mapResources(
     'messages',
     array(
         'prefix' => 'api',
-        'controller' => 'users',
+        'controller' => 'messages',
         'resourceMap' => array(
-            array('action' => 'getMessages', 'method' => 'GET', 'id' => false)
+            array('action' => 'getMessages', 'method' => 'GET', 'id' => false),
+            array('action' => 'reply', 'method' => 'POST', 'id' => false)
         )
     )
 );

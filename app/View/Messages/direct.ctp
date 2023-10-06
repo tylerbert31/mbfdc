@@ -1,20 +1,14 @@
 <?php echo $this->Html->css('message/direct'); ?>
 
-<?php
-
-
-?>
-
-
-
 
 <div style="margin: 0px 0px; ">
 
     <div class="flex-grow-0 py-3 px-4 border-top bg-light " style="position: fixed; top: 0; width: 100%; z-index: 2;">
         <div class="input-group">
             <?php echo $this->Html->link('Go back', array('controller' => 'messages', 'action' => 'index', ), array('class' => 'btn btn-outline-success mr-2')); ?>
-            <input type="text" class="form-control" placeholder="Type your message">
-            <button class="btn btn-primary">Send</button>
+
+            <input id="newMessage" type="text" class="form-control" placeholder="Type your message">
+            <button id="submit" class="btn btn-primary ml-2">Send</button>
         </div>
     </div>
 
@@ -60,3 +54,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var receiver_id = <?php echo $receiver_profile['user_id']; ?>;
+        var sender_id = <?php echo $user_profile['user_id']; ?>;
+
+        $('#submit').click(function () {
+            var message_content = $('#newMessage').val();
+            $.ajax({
+                url: 'http://localhost/mbfdc/messages/reply.json',
+                type: 'POST',
+                data: {
+                    message_content: message_content,
+                    receiver: receiver_id,
+                    sender: sender_id,
+                    receiver: receiver_id,
+                },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

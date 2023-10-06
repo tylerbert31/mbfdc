@@ -12,7 +12,7 @@ class MessagesController extends AppController
 	public function beforeFilter()
 	{
 		// parent::beforeFilter();
-		$this->Auth->allow(array('getMessages'));
+		$this->Auth->allow(array('getMessages', 'reply'));
 		$this->Auth->authenticate = array(
 			'Form' => array(
 				'fields' => array('username' => 'email')
@@ -61,33 +61,8 @@ class MessagesController extends AppController
 		$this->set('messages', $messages);
 	}
 
-	public function view($id = null)
-	{
-		if (!$this->Message->exists($id)) {
-			throw new NotFoundException(__('Invalid message'));
-		}
-		$options = array('conditions' => array('Message.' . $this->Message->primaryKey => $id));
-		$this->set('message', $this->Message->find('first', $options));
-	}
 
-	public function add()
-	{
 
-		// Fetch User ID
-		$this->set('user', $this->Auth->user('user_id'));
-
-		if ($this->request->is('post')) {
-			$this->Message->create();
-			$this->request->data['Message']['sender'] = $this->Auth->user('user_id');
-			$this->request->data['Message']['timestamp'] = date('Y-m-d H:i');
-			if ($this->Message->save($this->request->data)) {
-				$this->Session->setFlash('The message has been saved.');
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash('The message could not be saved. Please, try again.');
-			}
-		}
-	}
 	public function getMessages()
 	{
 		$messages = $this->Message->find('all');
@@ -120,7 +95,7 @@ class MessagesController extends AppController
 				'first',
 				array(
 					'conditions' => array('User.user_id' => $id),
-					'fields' => array('User.profile_url', 'User.firstname')
+					'fields' => array('User.profile_url', 'User.firstname', 'User.user_id')
 				)
 			);
 
@@ -154,6 +129,70 @@ class MessagesController extends AppController
 			$this->set('messages', $messages);
 		}
 
+		if ($this->request->is('post')) {
+			$user_id = $this->Auth->user('user_id');
+			$this->request->data['Message']['sender'] = $user_id;
+			$this->request->data['Message']['receiver'] = $id;
+			$this->request->data['Message']['timestamp'] = date('Y-m-d H:i:s');
+
+			$this->Message->create();
+			if ($this->Message->save($this->request->data)) {
+				$this->Session->setFlash(__('The message has been sent.'));
+				return $this->redirect(['action' => 'direct', $id]);
+			} else {
+				$this->Session->setFlash(__('The message could not be sent. Please, try again.'));
+			}
+		}
+
+
+
 	}
+
+	public function new()
+	{
+		$user_id = $this->Auth->user('user_id');
+		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
+		$this->set('user', $users[0]['User']);
+
+
+		if ($this->request->is('post')) {
+			$this->request->data['Message']['sender'] = $user_id;
+			$this->request->data['Message']['timestamp'] = date('Y-m-d H:i:s');
+
+			$this->Message->create();
+			if ($this->Message->save($this->request->data)) {
+				$this->Session->setFlash(__('The message has been saved.'));
+				return $this->redirect(['action' => 'index']);
+			} else {
+				$this->Session->setFlash(__('The message could not be saved. Please, try again.'));
+			}
+		}
+
+
+	}
+
+	public function reply()
+	{
+		if ($this->request->is('ajax')) {
+			// Set the response type to JSON
+			$this->autoRender = false;
+			$this->response->type('json');
+			$this->request->data['timestamp'] = date('Y-m-d H:i:s');
+
+			// Create a new Message entity and populate it with request data
+			$this->Message->create();
+			$this->Message->set($this->request->data);
+
+			// Save the entity
+			if ($this->Message->save()) {
+				// Success response
+				echo json_encode(['message' => 'Message saved successfully']);
+			} else {
+				// Error response
+				echo json_encode(['message' => 'Error saving message']);
+			}
+		}
+	}
+
 
 }
