@@ -37,7 +37,8 @@ Router::mapResources(
         'controller' => 'messages',
         'resourceMap' => array(
             array('action' => 'getMessages', 'method' => 'GET', 'id' => false),
-            array('action' => 'reply', 'method' => 'POST', 'id' => false)
+            array('action' => 'reply', 'method' => 'POST', 'id' => false),
+            array('action' => 'deleteConvo', 'method' => 'POST', 'id' => false)
         )
     )
 );

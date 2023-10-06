@@ -120,7 +120,7 @@ if ($user['profile_url'] != '') {
             },
             open: function (event, ui) {
                 // Customize the appearance of the autocomplete dropdown
-                $('.ui-autocomplete').css('width', '300px'); // Set the width as needed
+                $('.ui-autocomplete').css('width', $('#autocomplete').outerWidth() + 'px');
             }
         })
             .autocomplete("instance")._renderItem = function (ul, item) {

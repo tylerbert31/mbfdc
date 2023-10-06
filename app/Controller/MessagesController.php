@@ -12,7 +12,7 @@ class MessagesController extends AppController
 	public function beforeFilter()
 	{
 		// parent::beforeFilter();
-		$this->Auth->allow(array('getMessages', 'reply'));
+		$this->Auth->allow(array('getMessages', 'reply', 'deleteConvo'));
 		$this->Auth->authenticate = array(
 			'Form' => array(
 				'fields' => array('username' => 'email')
@@ -107,7 +107,7 @@ class MessagesController extends AppController
 				'all',
 				array(
 					'conditions' => array(
-						'AND' => array(
+						'OR' => array(
 							array(
 								'OR' => array(
 									array('Message.sender' => $user_id),
@@ -122,7 +122,7 @@ class MessagesController extends AppController
 							)
 						)
 					),
-					'order' => 'Message.timestamp DESC'
+					'order' => 'Message.timestamp ASC'
 				)
 			);
 
@@ -192,6 +192,29 @@ class MessagesController extends AppController
 				// Error response
 				echo json_encode(['message' => 'Error saving message']);
 			}
+		}
+	}
+
+	public function deleteConvo()
+	{
+		if ($this->request->is('ajax')) {
+			// Set the response type to JSON
+			$this->autoRender = false;
+			$sender = $this->request->data['sender'];
+			$receiver = $this->request->data['receiver'];
+
+			// Delete messages where sender is $receiver or $sender, and receiver is $receiver or $sender
+			$this->Message->deleteAll(
+				array(
+					'OR' => array(
+						array('sender' => $sender, 'receiver' => $receiver),
+						array('sender' => $receiver, 'receiver' => $sender)
+					)
+				)
+			);
+
+			// Send success response
+			echo json_encode(['message' => 'Conversation deleted successfully']);
 		}
 	}
 
