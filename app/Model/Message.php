@@ -4,13 +4,14 @@ App::uses('AppModel', 'Model');
  * Message Model
  *
  */
-class Message extends AppModel {
+class Message extends AppModel
+{
 
-/**
- * Validation rules
- *
- * @var array
- */
+	/**
+	 * Validation rules
+	 *
+	 * @var array
+	 */
 	public $validate = array(
 		'sender' => array(
 			'numeric' => array(
@@ -53,4 +54,8 @@ class Message extends AppModel {
 			),
 		),
 	);
+
+
+
+
 }
