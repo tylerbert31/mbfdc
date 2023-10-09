@@ -63,6 +63,18 @@
 
         $('#submit').click(function () {
             var message_content = $('#newMessage').val();
+            sendMessage(message_content);
+        });
+
+        $('#newMessage').keypress(function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                var message_content = $('#newMessage').val();
+                sendMessage(message_content);
+            }
+        });
+
+        function sendMessage(message_content) {
             $.ajax({
                 url: 'http://localhost/mbfdc/messages/reply.json',
                 type: 'POST',
@@ -79,7 +91,7 @@
                     console.log(xhr.responseText);
                 }
             });
-        });
+        }
 
         $('#delete').click(function () {
             $.confirm({
