@@ -56,7 +56,7 @@
                                     <?php echo $message['User']['firstname'] . ' ' . $message['User']['lastname']; ?>
                                 </h5><br>
                                 <p class="card-text" style="margin-top: -35px">
-                                    <?php echo $message['Message']['message_content']; ?>
+                                    <?php echo $message[0]['message_content']; ?>
                                     <span class="message-date">
                                         <?php echo substr((substr($message[0]['latest_timestamp'], 10)), 0, -3); ?>
                                     </span>
@@ -67,9 +67,11 @@
                 </li>
             <?php endforeach; ?>
         </ul>
-
     </div>
 </div>
+<pre>
+
+
 <script>
     $(document).ready(function () {
         var current_user = <?php echo $user_id; ?>

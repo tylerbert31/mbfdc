@@ -2,7 +2,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: calc(100% - 80px); /* Adjust the max-width as needed */
+    max-width: calc(100% - 80px); 
 }
 
 .message-date {
