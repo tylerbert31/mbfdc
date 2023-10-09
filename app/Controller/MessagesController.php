@@ -107,7 +107,7 @@ class MessagesController extends AppController
 				'all',
 				array(
 					'conditions' => array(
-						'OR' => array(
+						'AND' => array(
 							array(
 								'OR' => array(
 									array('Message.sender' => $user_id),
