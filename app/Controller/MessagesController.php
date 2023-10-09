@@ -160,6 +160,7 @@ class MessagesController extends AppController
 
 	public function new()
 	{
+		ini_set('date.timezone', 'Asia/Manila');
 		$user_id = $this->Auth->user('user_id');
 		$users = $this->User->find('all', array('conditions' => array('User.user_id' => $user_id)));
 		$this->set('user', $users[0]['User']);
@@ -183,6 +184,7 @@ class MessagesController extends AppController
 
 	public function reply()
 	{
+		ini_set('date.timezone', 'Asia/Manila');
 		if ($this->request->is('ajax')) {
 			// Set the response type to JSON
 			$this->autoRender = false;

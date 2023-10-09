@@ -43,6 +43,7 @@ class UsersController extends AppController
 	// Page Controllers
 	public function register()
 	{
+		ini_set('date.timezone', 'Asia/Manila');
 		//post request
 		if ($this->request->is('post')) {
 			//create user
@@ -114,6 +115,7 @@ class UsersController extends AppController
 
 	public function login()
 	{
+		ini_set('date.timezone', 'Asia/Manila');
 		if ($this->request->is('post')) {
 
 			if ($this->Auth->login()) {
